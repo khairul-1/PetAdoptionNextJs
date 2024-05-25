@@ -8,11 +8,13 @@ import UserProfileUpdate from "../components/UserProfileUpdate";
 import ChangePassword from "../components/ChangePassword";
 import UserPetProfile from "../components/UserPetProfile";
 import UpdateUserStatus from "../components/UpdateUserStatus";
+import AddPet from "../components/AddPet";
 
 function RootLayout({ children }: { children: ReactNode }) {
   return (
     <div>
       <div>
+        <AddPet />
         <UpdateUserStatus />
         <UserPetProfile />
         <ChangePassword />

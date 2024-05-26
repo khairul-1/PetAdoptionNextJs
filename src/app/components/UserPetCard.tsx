@@ -1,4 +1,5 @@
 // components/PetCard.tsx
+import Image from "next/image";
 import { useState } from "react";
 
 interface PetWithStatus {
@@ -31,14 +32,24 @@ const UserPetCard: React.FC<PetCardProps> = ({ pet }) => {
 
   return (
     <div>
-      <div className="max-w-sm rounded overflow-hidden shadow-lg">
-        <img className="w-full" src={pet.photoUrl} alt={pet.name} />
+      <div className="border border-gray-200 rounded-md p-4">
+        {/* <div className="max-w-sm rounded overflow-hidden shadow-lg"> */}
+        {/* <img className="w-full" src={pet.photoUrl} alt={pet.name} /> */}
+        <Image
+          src={pet.photoUrl}
+          quality={20}
+          width={400}
+          height={400}
+          alt={pet.name}
+          className="rounded-lg mb-2 w-24 h-24"
+        />
+
         <div className="px-6 py-4">
           <div className="font-bold text-xl mb-2">{pet.name}</div>
-          <p className="text-gray-700 text-base">{pet.description}</p>
+          <p className="text-gray-700 text-sm">{pet.description}</p>
         </div>
-        <div className="px-6 pt-4 pb-2">
-          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+        <div className="px-6 pt-2 pb-2">
+          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2 mb-2">
             {pet.breed}
           </span>
           <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
@@ -47,15 +58,17 @@ const UserPetCard: React.FC<PetCardProps> = ({ pet }) => {
           <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
             {pet.size}
           </span>
-          <span className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-blue-700 mr-2 mb-2">
-            Status: {pet.status}
-          </span>
-          <button
-            onClick={openModal}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Details
-          </button>
+          <div>
+            <span className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-blue-700 mr-2 mb-2">
+              Status: {pet.status}
+            </span>
+            <button
+              onClick={openModal}
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Details
+            </button>
+          </div>
         </div>
       </div>
 

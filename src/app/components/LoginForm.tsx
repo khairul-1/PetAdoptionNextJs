@@ -23,7 +23,9 @@ const LoginForm: React.FC = () => {
       }
       //console.log(response.data.data.token);
       toast.success(`Login Successful ${response.data.message}`, {
-        onClose: () => {},
+        onClose: () => {
+          window.location.href = "/"; // Navigate to the home page
+        },
         autoClose: 2000,
       });
     } catch (AxiosError: any) {

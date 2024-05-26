@@ -37,11 +37,36 @@ interface PetWithStatus extends Pet {
   status: string;
 }
 
-const AdoptionRequests: React.FC = () => {
+const UserPetProfile: React.FC = () => {
   const [adoptionRequests, setAdoptionRequests] = useState<AdoptionRequest[]>(
     []
   );
   const [petsWithStatus, setPetsWithStatus] = useState<PetWithStatus[]>([]);
+
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Fetch user profile
+      axios
+        .get("http://localhost:5000/api/profile", {
+          headers: { Authorization: `${token}` },
+        })
+        .then((response) => {
+          setUserData({
+            name: response.data.data.name,
+            email: response.data.data.email,
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching user profile:", error);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -74,7 +99,7 @@ const AdoptionRequests: React.FC = () => {
           const filteredPets = response.data.data.filter((pet: Pet) =>
             petIds.includes(pet.id)
           );
-          const petsWithStatus = filteredPets.map((pet) => ({
+          const petsWithStatus = filteredPets.map((pet: any) => ({
             ...pet,
             status:
               adoptionRequests.find((request) => request.petId === pet.id)
@@ -90,14 +115,29 @@ const AdoptionRequests: React.FC = () => {
 
   return (
     <div className="container mx-auto mt-10">
-      <h1 className="text-4xl text-center mb-6">Your Adoption Requests</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {petsWithStatus.map((pet) => (
-          <UserPetCard key={pet.id} pet={pet} />
-        ))}
+      <div>
+        <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-xl font-bold mb-2">User Information</h2>
+          <p className="text-gray-700">
+            <strong>Name:</strong> {userData.name}
+          </p>
+          <p className="text-gray-700">
+            <strong>Email:</strong> {userData.email}
+          </p>
+        </div>
+      </div>
+      <div className="container mx-auto">
+        <h1 className="text-4xl text-center mb-6">
+          My Adoption Requests or Adopted Pet
+        </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+          {petsWithStatus.map((pet) => (
+            <UserPetCard key={pet.id} pet={pet} />
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default AdoptionRequests;
+export default UserPetProfile;

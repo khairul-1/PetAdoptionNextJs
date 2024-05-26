@@ -33,7 +33,7 @@ const PetCard: React.FC<PetCardProps> = ({ pet }) => {
         width={400}
         height={400}
         alt={pet.name}
-        className="rounded-lg mb-2 w-24"
+        className="rounded-lg mb-2 w-40 h-40"
       />
 
       <p className="text-sm text-gray-600 mb-2">{pet.species}</p>

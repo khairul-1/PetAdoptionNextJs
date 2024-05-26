@@ -22,7 +22,9 @@ const RegistrationForm: React.FC = () => {
         password,
       });
       toast.success(`User registered successfully ${response.data.message}`, {
-        onClose: () => <Link href={"/dashboard"}></Link>,
+        onClose: () => {
+          window.location.href = "/"; // Navigate to the home page
+        },
         autoClose: 2000,
       });
     } catch (AxiosError: any) {
@@ -87,6 +89,12 @@ const RegistrationForm: React.FC = () => {
         >
           Register
         </button>
+        <div className="mt-4 text-sm text-center text-gray-600">
+          Already have an account?{" "}
+          <Link href="/login">
+            <div className="underline text-green-600">Login</div>
+          </Link>
+        </div>
       </form>
     </div>
   );

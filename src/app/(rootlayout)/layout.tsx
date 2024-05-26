@@ -9,12 +9,13 @@ import ChangePassword from "../components/ChangePassword";
 import UserPetProfile from "../components/UserPetProfile";
 import UpdateUserStatus from "../components/UpdateUserStatus";
 import AddPet from "../components/AddPet";
+import AboutUs from "../components/AboutUs";
 
 function RootLayout({ children }: { children: ReactNode }) {
   return (
     <div>
       <div>
-        <AddPet />
+        {/* <AddPet />
         <UpdateUserStatus />
         <UserPetProfile />
         <ChangePassword />
@@ -22,6 +23,7 @@ function RootLayout({ children }: { children: ReactNode }) {
         <RegistrationForm />
         <LoginForm />
         <PetsPage />
+        <AboutUs /> */}
       </div>
       {children}
     </div>

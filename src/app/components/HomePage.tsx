@@ -80,7 +80,7 @@ const HomePage: React.FC = () => {
             <input
               type="text"
               name="species"
-              placeholder="Species"
+              placeholder="Species Cat or Dog"
               value={search.species}
               onChange={handleChange}
               className="p-2 border rounded"
@@ -112,7 +112,7 @@ const HomePage: React.FC = () => {
             <input
               type="text"
               name="size"
-              placeholder="Size"
+              placeholder="Small or Medium or Large"
               value={search.size}
               onChange={handleChange}
               className="p-2 border rounded"

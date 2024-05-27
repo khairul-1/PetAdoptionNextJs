@@ -1,7 +1,8 @@
 // PetCard.tsx
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface PetCardProps {
   pet: {
@@ -24,6 +25,15 @@ interface PetCardProps {
 
 const PetCard: React.FC<PetCardProps> = ({ pet }) => {
   //console.log(pet.photoUrl);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   return (
     <div className="border border-gray-200 rounded-md p-4">
       <h2 className="text-lg font-semibold mb-2">{pet.name}</h2>
@@ -36,31 +46,30 @@ const PetCard: React.FC<PetCardProps> = ({ pet }) => {
         className="rounded-lg mb-2 w-40 h-40"
       />
 
-      <p className="text-sm text-gray-600 mb-2">{pet.species}</p>
+      {/* <p className="text-sm text-gray-600 mb-2">{pet.species}</p> */}
       <p className="text-sm text-gray-600 mb-2">Breed: {pet.breed}</p>
       <p className="text-sm text-gray-600 mb-2">Age: {pet.age}</p>
-      <p className="text-sm text-gray-600 mb-2">Size: {pet.size}</p>
+      {/* <p className="text-sm text-gray-600 mb-2">Size: {pet.size}</p> */}
       <p className="text-sm text-gray-600 mb-2">Location: {pet.location}</p>
       <p className="text-sm text-gray-600 mb-2">{pet.description}</p>
       <p className="text-sm text-gray-600 mb-2">
         Temperament: {pet.temperament}
       </p>
-      <p className="text-sm text-gray-600 mb-2">
+      {/* <p className="text-sm text-gray-600 mb-2">
         Medical History: {pet.medicalHistory}
       </p>
       <p className="text-sm text-gray-600 mb-2">
         Adoption Requirements: {pet.adoptionRequirements}
-      </p>
-      <p className="text-sm text-gray-600 mb-2">
+      </p> */}
+      {/* <p className="text-sm text-gray-600 mb-2">
         Created At: {new Date(pet.createdAt).toLocaleDateString()}
       </p>
       <p className="text-sm text-gray-600 mb-2">
         Updated At: {new Date(pet.updatedAt).toLocaleDateString()}
-      </p>
-
-      <Link href={`/adoption-requests/${pet.id}`}>
+      </p> */}
+      <Link href={`/details/${pet.id}`}>
         <p className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
-          Adopt {pet.name}
+          Details {pet.name}
         </p>
       </Link>
     </div>

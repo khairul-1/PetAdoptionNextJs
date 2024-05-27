@@ -37,6 +37,10 @@ const LoginForm: React.FC = () => {
   return (
     <div>
       <ToastContainer />
+      <div className="mx-auto text-center">
+        <h1 className="bg-sky-500 ">Login with Email and Password </h1>
+      </div>
+
       <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10">
         <div className="mb-4">
           <label

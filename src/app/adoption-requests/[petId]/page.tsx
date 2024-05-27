@@ -4,7 +4,6 @@ import React from "react";
 function AdoptionPetId({ params }: { params: { petId: string } }) {
   return (
     <div>
-      AdoptionPetId
       <div>
         <AdoptionRequest key={params.petId} petId={params.petId} />
       </div>

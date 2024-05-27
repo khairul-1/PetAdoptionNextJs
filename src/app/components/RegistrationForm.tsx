@@ -37,6 +37,11 @@ const RegistrationForm: React.FC = () => {
   return (
     <div>
       <ToastContainer />
+      <div className="mx-auto text-center">
+        <h1 className="bg-blue-500 ">
+          Register with Name, Email and Password{" "}
+        </h1>
+      </div>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10">
         <div className="mb-4">
           <label

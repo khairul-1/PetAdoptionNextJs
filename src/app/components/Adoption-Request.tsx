@@ -64,14 +64,14 @@ const AdoptionRequest: React.FC<PetCardProps> = ({ petId }) => {
       // Show success toast
       toast.success("Adoption request submitted successfully!", {
         autoClose: 2000, // Close after 2 seconds
-        // onClose: () => {
-        //   // Redirect to About page after toast is closed
-        //   <Link href={"/about"} />;
-        // },
+        onClose: () => {
+          // Redirect to About page after toast is closed
+          // <Link href={"/about"} />;
+          window.location.href = "/myProfile"; // Navigate to the home page
+        },
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting adoption request:", error);
-      // Show error toast
       toast.error("Failed to submit adoption request");
     }
   };

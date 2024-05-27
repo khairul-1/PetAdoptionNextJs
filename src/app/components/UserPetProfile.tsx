@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import UserPetCard from "./UserPetCard";
 import Link from "next/link";
+import UserProfileUpdate from "./UserProfileUpdate";
+import ChangePassword from "./ChangePassword";
 
 interface AdoptionRequest {
   id: string;
@@ -115,7 +117,58 @@ const UserPetProfile: React.FC = () => {
 
   return (
     <div className="container mx-auto mt-10">
-      <div>
+      <div className="drawer lg:drawer-open">
+        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content flex flex-col items-center justify-center">
+          {/* Page content here */}
+          <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-2">User Information</h2>
+            <p className="text-gray-700">
+              <strong>Name:</strong> {userData.name}
+            </p>
+            <p className="text-gray-700">
+              <strong>Email:</strong> {userData.email}
+            </p>
+          </div>
+          <div className="container mx-auto">
+            <h1 className="text-4xl text-center mb-6">
+              My Adoption Requests or Adopted Pet
+            </h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+              {petsWithStatus.map((pet) => (
+                <UserPetCard key={pet.id} pet={pet} />
+              ))}
+            </div>
+          </div>
+
+          <label
+            htmlFor="my-drawer-2"
+            className="btn btn-primary drawer-button lg:hidden"
+          >
+            Open drawer
+          </label>
+        </div>
+        <div className="drawer-side">
+          <label
+            htmlFor="my-drawer-2"
+            aria-label="close sidebar"
+            className="drawer-overlay"
+          ></label>
+          <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+            {/* Sidebar content here */}
+            <li>
+              {/* <Link href={''}> Edit My Profile</Link> */}
+              <UserProfileUpdate />
+            </li>
+            <li>
+              {/* <a>Change Password</a> */}
+              <ChangePassword />
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* <div>
         <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
           <h2 className="text-xl font-bold mb-2">User Information</h2>
           <p className="text-gray-700">
@@ -135,7 +188,7 @@ const UserPetProfile: React.FC = () => {
             <UserPetCard key={pet.id} pet={pet} />
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

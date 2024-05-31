@@ -1,5 +1,3 @@
-// components/AddPet.tsx
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -26,6 +24,7 @@ const AddPet: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [modalMessage, setModalMessage] = useState<string | null>(null);
+  //let imageFile: any;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -57,10 +56,18 @@ const AddPet: React.FC = () => {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImageFile(e.target.files[0]);
+    e.preventDefault();
+    if (e.target.files && e.target.files[0]) {
+      const imageFile = e.target.files[0];
+      console.log("Selected file:", imageFile);
+      setImageFile(imageFile);
+      console.log(imageFile);
     }
   };
+
+  useEffect(() => {
+    console.log("imageFile state updated:", imageFile);
+  }, [imageFile]);
 
   const uploadImage = async () => {
     if (imageFile) {
@@ -92,20 +99,20 @@ const AddPet: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check if all fields are filled
+    //setPetData({...petData, photoUrl: imageFile} )
     const isFormValid =
       Object.values(petData).every((value) => value !== "") && imageFile;
 
-    if (!isFormValid) {
-      setModalMessage("All input fields are required.");
-      return;
-    }
+    // if (!isFormValid) {
+    //   setModalMessage("All input fields are required.");
+    //   return;
+    // }
 
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const imageUrl = await uploadImage();
-
+        console.log(imageUrl);
         if (imageUrl) {
           const response = await axios.post(
             "http://localhost:5000/api/pets",
@@ -115,20 +122,6 @@ const AddPet: React.FC = () => {
             }
           );
           setModalMessage(response.data.message);
-          setPetData({
-            name: "",
-            photoUrl: "",
-            species: "",
-            breed: "",
-            age: 1,
-            size: "",
-            location: "",
-            description: "",
-            temperament: "",
-            medicalHistory: "",
-            adoptionRequirements: "",
-          });
-          setImageFile(null);
         } else {
           setModalMessage("Failed to get image URL.");
         }
@@ -140,66 +133,75 @@ const AddPet: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto mt-10">
+    <div className="mx-auto mt-10">
       {modalMessage && (
         <Modal message={modalMessage} onClose={() => setModalMessage(null)} />
       )}
-      <h1 className="text-4xl text-center mb-6">Add New Pet</h1>
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-        {Object.keys(petData).map(
-          (key) =>
-            key !== "photoUrl" && (
-              <div className="mb-4" key={key}>
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor={key}
-                >
-                  {key.charAt(0).toUpperCase() + key.slice(1)}
-                </label>
-                {key === "description" ||
-                key === "temperament" ||
-                key === "medicalHistory" ||
-                key === "adoptionRequirements" ? (
-                  <textarea
-                    id={key}
-                    value={petData[key as keyof typeof petData]}
-                    onChange={handleChange}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  />
-                ) : (
-                  <input
-                    id={key}
-                    type={key === "age" ? "number" : "text"}
-                    value={petData[key as keyof typeof petData]}
-                    onChange={handleChange}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  />
-                )}
-              </div>
-            )
-        )}
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="photoUrl"
+      {isAdmin ? (
+        <>
+          <h1 className="text-4xl text-center mb-6">Add New Pet</h1>
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-2 max-w-lg mx-auto"
           >
-            Photo
-          </label>
-          <input
-            id="photoUrl"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        >
-          Add Pet
-        </button>
-      </form>
+            {Object.keys(petData).map(
+              (key) =>
+                key !== "photoUrl" && (
+                  <div className="mb-4" key={key}>
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+                      htmlFor={key}
+                    >
+                      {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </label>
+                    {key === "description" ||
+                    key === "temperament" ||
+                    key === "medicalHistory" ||
+                    key === "adoptionRequirements" ? (
+                      <textarea
+                        id={key}
+                        value={petData[key as keyof typeof petData]}
+                        onChange={handleChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      />
+                    ) : (
+                      <input
+                        id={key}
+                        type={key === "age" ? "number" : "text"}
+                        value={petData[key as keyof typeof petData]}
+                        onChange={handleChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      />
+                    )}
+                  </div>
+                )
+            )}
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="photoUrl"
+              >
+                Photo
+              </label>
+              <input
+                id="photoUrl"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Add Pet
+            </button>
+          </form>
+        </>
+      ) : (
+        <p className="text-center text-red-500">{modalMessage}</p>
+      )}
     </div>
   );
 };

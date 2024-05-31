@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddPet from "./AddPet";
+import AdminPetUpdate from "./AdminPetUpdate";
 
 const UserPetAdmin: React.FC = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -307,7 +308,7 @@ const UserPetAdmin: React.FC = () => {
 
       <dialog id="add_pet_modal" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Add Pet</h3>
+          {/* <h3 className="font-bold text-lg">Add Pet</h3> */}
           <AddPet />
           <div className="modal-action">
             <form method="dialog">
@@ -316,6 +317,7 @@ const UserPetAdmin: React.FC = () => {
           </div>
         </div>
       </dialog>
+      <AdminPetUpdate />
     </div>
   );
 };

@@ -1,24 +1,48 @@
 // components/PrivateRoute.tsx
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { decode } from "jwt-js-decode";
 
 const PrivateRoute = (WrappedComponent: React.FC<any>) => {
   const AuthenticatedComponent: React.FC<any> = (props) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    //const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
       const token = localStorage.getItem("token");
+
       if (token) {
-        setIsAuthenticated(true);
+        try {
+          const decodedToken: any = decode(token);
+          //console.log(decodedToken.payload.type);
+          const currentTime = Date.now() / 1000;
+
+          if (decodedToken.payload.exp < currentTime) {
+            // Token has expired
+
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+          } else {
+            // Token is valid
+            setIsAuthenticated(true);
+          }
+        } catch (error) {
+          console.error("Error decoding token:", error);
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+        }
       } else {
-        //router.push("/login");
-        window.location.href = "/login"; // Redirect to login if not authenticated
+        window.location.href = "/login";
       }
-    });
+
+      setIsLoading(false);
+    }, []);
+
+    if (isLoading) {
+      return <div>Loading...</div>; // You can add a loading spinner here
+    }
 
     if (!isAuthenticated) {
-      return <div>Loading...</div>; // You can add a loading spinner here
+      return null; // or a redirect component
     }
 
     return <WrappedComponent {...props} />;

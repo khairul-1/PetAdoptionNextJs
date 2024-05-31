@@ -4,9 +4,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import UserPetCard from "./UserPetCard";
-import Link from "next/link";
 import UserProfileUpdate from "./UserProfileUpdate";
 import ChangePassword from "./ChangePassword";
+import PrivateRoute from "./PrivateRoute"; // Import the HOC
 
 interface AdoptionRequest {
   id: string;
@@ -44,11 +44,7 @@ const UserPetProfile: React.FC = () => {
     []
   );
   const [petsWithStatus, setPetsWithStatus] = useState<PetWithStatus[]>([]);
-
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-  });
+  const [userData, setUserData] = useState({ name: "", email: "" });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -101,7 +97,7 @@ const UserPetProfile: React.FC = () => {
           const filteredPets = response.data.data.filter((pet: Pet) =>
             petIds.includes(pet.id)
           );
-          const petsWithStatus = filteredPets.map((pet: any) => ({
+          const petsWithStatus = filteredPets.map((pet: Pet) => ({
             ...pet,
             status:
               adoptionRequests.find((request) => request.petId === pet.id)
@@ -115,22 +111,20 @@ const UserPetProfile: React.FC = () => {
     }
   }, [adoptionRequests]);
 
+  const showModal = (modalId: string) => {
+    const modal = document.getElementById(modalId) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+    }
+  };
+
   return (
     <div className="container mx-auto mt-10">
-      <div className="drawer lg:drawer-open">
+      <div className="drawer drawer-mobile lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content flex flex-col items-center justify-center">
+        <div className="drawer-content flex flex-col items-center lg:items-start justify-center">
           {/* Page content here */}
-          <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-2">User Information</h2>
-            <p className="text-gray-700">
-              <strong>Name:</strong> {userData.name}
-            </p>
-            <p className="text-gray-700">
-              <strong>Email:</strong> {userData.email}
-            </p>
-          </div>
-          <div className="container mx-auto">
+          <div className="w-full lg:w-3/4 mx-auto">
             <h1 className="text-4xl text-center mb-6">
               My Adoption Requests or Adopted Pet
             </h1>
@@ -140,7 +134,6 @@ const UserPetProfile: React.FC = () => {
               ))}
             </div>
           </div>
-
           <label
             htmlFor="my-drawer-2"
             className="btn btn-primary drawer-button lg:hidden"
@@ -149,48 +142,71 @@ const UserPetProfile: React.FC = () => {
           </label>
         </div>
         <div className="drawer-side">
-          <label
-            htmlFor="my-drawer-2"
-            aria-label="close sidebar"
-            className="drawer-overlay"
-          ></label>
+          <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
           <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
             {/* Sidebar content here */}
             <li>
-              {/* <Link href={''}> Edit My Profile</Link> */}
-              <UserProfileUpdate />
+              <h2 className="text-xl font-bold mt-10 p-6">User Dashboard</h2>
             </li>
             <li>
-              {/* <a>Change Password</a> */}
-              <ChangePassword />
+              <div className="text-gray-700">
+                <p className="font-bold">User Name:</p> {userData.name}
+              </div>
+            </li>
+            <li>
+              <div className="text-gray-700 mt-2">
+                <p className="font-bold">User Email:</p> {userData.email}
+              </div>
+            </li>
+            <li>
+              <button
+                className="btn btn-primary mt-2 underline"
+                onClick={() => showModal("profile_modal")}
+              >
+                Edit My Profile
+              </button>
+              <dialog
+                id="profile_modal"
+                className="modal modal-bottom sm:modal-middle"
+              >
+                <div className="modal-box ">
+                  <h3 className="font-bold text-lg">Update Profile</h3>
+                  <UserProfileUpdate />
+                  <div className="modal-action">
+                    <form method="dialog">
+                      <button className="btn">Close</button>
+                    </form>
+                  </div>
+                </div>
+              </dialog>
+            </li>
+            <li>
+              <button
+                className="btn btn-primary mt-2 underline"
+                onClick={() => showModal("password_modal")}
+              >
+                Change Password
+              </button>
+              <dialog
+                id="password_modal"
+                className="modal modal-bottom sm:modal-middle"
+              >
+                <div className="modal-box ">
+                  <h3 className="font-bold text-lg">Change Password</h3>
+                  <ChangePassword />
+                  <div className="modal-action">
+                    <form method="dialog">
+                      <button className="btn">Close</button>
+                    </form>
+                  </div>
+                </div>
+              </dialog>
             </li>
           </ul>
         </div>
       </div>
-
-      {/* <div>
-        <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-          <h2 className="text-xl font-bold mb-2">User Information</h2>
-          <p className="text-gray-700">
-            <strong>Name:</strong> {userData.name}
-          </p>
-          <p className="text-gray-700">
-            <strong>Email:</strong> {userData.email}
-          </p>
-        </div>
-      </div>
-      <div className="container mx-auto">
-        <h1 className="text-4xl text-center mb-6">
-          My Adoption Requests or Adopted Pet
-        </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-          {petsWithStatus.map((pet) => (
-            <UserPetCard key={pet.id} pet={pet} />
-          ))}
-        </div>
-      </div> */}
     </div>
   );
 };
 
-export default UserPetProfile;
+export default PrivateRoute(UserPetProfile);

@@ -1,15 +1,15 @@
 "use client";
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const UserProfileUpdate = () => {
   const [userData, setUserData] = useState({
     name: "",
     email: "",
   });
+
+  const [modalMessage, setModalMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -46,13 +46,19 @@ const UserProfileUpdate = () => {
           headers: { Authorization: `${token}` },
         }
       );
-      // Show success toast
-      toast.success("Profile updated successfully!");
+      // Show success modal
+      setModalMessage("Profile updated successfully!");
+      setIsModalOpen(true);
     } catch (error) {
       console.error("Error updating profile:", error);
-      // Show error toast
-      toast.error("Failed to update profile");
+      // Show error modal
+      setModalMessage("Failed to update profile");
+      setIsModalOpen(true);
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -98,7 +104,19 @@ const UserProfileUpdate = () => {
           Update Profile
         </button>
       </form>
-      <ToastContainer />
+
+      {isModalOpen && (
+        <dialog open className="modal modal-bottom sm:modal-middle">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">{modalMessage}</h3>
+            <div className="modal-action">
+              <button className="btn" onClick={closeModal}>
+                Close
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
     </div>
   );
 };

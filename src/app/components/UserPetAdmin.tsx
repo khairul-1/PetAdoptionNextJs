@@ -13,12 +13,8 @@ const UserPetAdmin: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [view, setView] = useState("allUsers");
-  const [view2, setView2] = useState("");
-  const [view3, setView3] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
   const [activeButton, setActiveButton] = useState("");
-  const [activeButton2, setActiveButton2] = useState("");
-  const [activeButton3, setActiveButton3] = useState("");
 
   useEffect(() => {
     // Fetch all user data
@@ -126,30 +122,34 @@ const UserPetAdmin: React.FC = () => {
       setLoading(false);
     }
   };
+
   if (loading) return <div className="text-center">Loading...</div>;
+
   return (
     <div className="flex">
       <div className="w-64 h-full shadow-md bg-white px-1 fixed">
         <ul className="absolute">
           <li className="relative">
             <button
-              className={`btn btn-primary mt-2 underline ${
+              className={`btn ${
+                view === "allUsers" ? "bg-green-500" : "btn-primary"
+              } mt-2 underline ${
                 activeButton === "allUsers"
-                  ? "btn-primary text-white"
-                  : "bg-green-500 text-white"
+                  ? "bg-green-500 text-white"
+                  : "btn-primary text-white"
               }`}
               onClick={() => {
-                view === "" ? setView("allUsers") : setView("");
+                setView(view === "allUsers" ? "" : "allUsers");
                 setActiveButton(activeButton === "allUsers" ? "" : "allUsers");
               }}
             >
-              {view === "" ? "View All Users" : "Hide All Users"}
+              {view === "allUsers" ? "Hide All Users" : "View All Users"}
             </button>
           </li>
           <li className="relative">
             <button
-              className="btn btn-primary mt-2 underline"
-              onClick={() => showModal("profile_modal", {}, "type")}
+              className="btn btn-primary mt-2  underline"
+              onClick={() => showModal("profile_modal", {})}
             >
               Change User Type
             </button>
@@ -157,7 +157,7 @@ const UserPetAdmin: React.FC = () => {
           <li className="relative">
             <button
               className="btn btn-primary mt-2 underline"
-              onClick={() => showModal("status_modal", {}, "status")}
+              onClick={() => showModal("status_modal", {})}
             >
               Change User Status
             </button>
@@ -165,53 +165,47 @@ const UserPetAdmin: React.FC = () => {
           <li className="relative">
             <button
               className="btn btn-primary mt-2 underline"
-              onClick={() => showModal("add_pet_modal", {}, "add_pet")}
+              onClick={() => showModal("add_pet_modal", {})}
             >
               Add Pet
             </button>
           </li>
-          {/* <li className="relative">
-            <button
-              className="btn btn-primary mt-2 underline"
-              onClick={() =>
-                showModal("adoption_request_modal", {}, "adoption_request")
-              }
-            >
-              Adoption Request
-            </button>
-          </li> */}
           <li className="relative">
             <button
               className={`btn btn-primary mt-2 underline ${
-                activeButton2 === "pet-edit-delete"
+                activeButton === "pet-edit-delete"
                   ? "bg-green-500 text-white"
                   : "btn-primary text-white"
               }`}
               onClick={() => {
-                view2 === "" ? setView2("pet-edit-delete") : setView2("");
-                setActiveButton2(
-                  activeButton2 === "pet-edit-delete" ? "" : "pet-edit-delete"
+                setView(view === "pet-edit-delete" ? "" : "pet-edit-delete");
+                setActiveButton(
+                  activeButton === "pet-edit-delete" ? "" : "pet-edit-delete"
                 );
               }}
             >
-              {view2 === "" ? "View Pet Edit Delete" : "Hide Adoption Request"}
+              {view === "pet-edit-delete"
+                ? "Hide Pet Edit/Delete"
+                : "View Pet Edit/Delete"}
             </button>
           </li>
           <li className="relative">
             <button
               className={`btn btn-primary mt-2 underline ${
-                activeButton3 === "adoption-request"
+                activeButton === "adoption-request"
                   ? "bg-green-500 text-white"
                   : "btn-primary text-white"
               }`}
               onClick={() => {
-                view3 === "" ? setView3("adoption-request") : setView3("");
-                setActiveButton3(
-                  activeButton3 === "adoption-request" ? "" : "adoption-request"
+                setView(view === "adoption-request" ? "" : "adoption-request");
+                setActiveButton(
+                  activeButton === "adoption-request" ? "" : "adoption-request"
                 );
               }}
             >
-              {view3 === "" ? "View Adoption Request" : "Hide Adoption Request"}
+              {view === "adoption-request"
+                ? "Hide Adoption Request"
+                : "View Adoption Request"}
             </button>
           </li>
         </ul>
@@ -264,9 +258,9 @@ const UserPetAdmin: React.FC = () => {
 
         <dialog
           id="profile_modal"
-          className="modal modal-bottom sm:modal-middle"
+          className="modal modal-bottom sm:modal-middle b-2"
         >
-          <div className="modal-box">
+          <div className="modal-box m-2">
             <h3 className="font-bold text-lg">Change User Type</h3>
             <form onSubmit={handleChangeUserType}>
               <div className="mb-4">
@@ -323,9 +317,9 @@ const UserPetAdmin: React.FC = () => {
 
         <dialog
           id="status_modal"
-          className="modal modal-bottom sm:modal-middle"
+          className="modal modal-bottom sm:modal-middle b-2"
         >
-          <div className="modal-box">
+          <div className="modal-box m-2">
             <h3 className="font-bold text-lg">Change User Status</h3>
             <form onSubmit={handleChangeUserStatus}>
               <div className="mb-4">
@@ -385,7 +379,6 @@ const UserPetAdmin: React.FC = () => {
           className="modal modal-bottom sm:modal-middle"
         >
           <div className="modal-box">
-            {/* <h3 className="font-bold text-lg">Add Pet</h3> */}
             <AddPet />
             <div className="modal-action">
               <form method="dialog">
@@ -395,28 +388,15 @@ const UserPetAdmin: React.FC = () => {
           </div>
         </dialog>
 
-        {/* <dialog
-          id="adoption_request_modal"
-          className="modal modal-bottom sm:modal-middle"
-        >
-          <div className="modal-box">
-            <AllAdoptionRequest />
-            <div className="modal-action">
-              <form method="dialog">
-                <button className="btn">Close</button>
-              </form>
-            </div>
-          </div>
-        </dialog> */}
         <div className="ml-64">
-          {view2 === "pet-edit-delete" && (
+          {view === "pet-edit-delete" && (
             <>
               <AdminPetUpdate />
             </>
           )}
         </div>
         <div className="ml-64">
-          {view3 === "adoption-request" && (
+          {view === "adoption-request" && (
             <>
               <AllAdoptionRequest />
             </>

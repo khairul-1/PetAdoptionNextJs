@@ -22,6 +22,7 @@ const UpdateUserStatus: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [updateType, setUpdateType] = useState(false);
   const [updateStatus, setUpdateStatus] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -38,6 +39,8 @@ const UpdateUserStatus: React.FC = () => {
       } catch (error) {
         console.error("Error decoding token:", error);
         toast.error("Invalid token.");
+      } finally {
+        setLoading(false);
       }
     }
   }, []);
@@ -61,6 +64,7 @@ const UpdateUserStatus: React.FC = () => {
       }
 
       try {
+        setLoading(true);
         await axios.put("http://localhost:5000/api/user-status", data, {
           headers: { Authorization: `${token}` },
         });
@@ -68,10 +72,12 @@ const UpdateUserStatus: React.FC = () => {
       } catch (error) {
         console.error("Error updating user status:", error);
         toast.error("Failed to update user status.");
+      } finally {
+        setLoading(false);
       }
     }
   };
-
+  if (loading) return <div className="text-center">Loading...</div>;
   return (
     <div className="container mx-auto mt-10">
       <ToastContainer />

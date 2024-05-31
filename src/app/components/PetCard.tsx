@@ -27,6 +27,7 @@ const PetCard: React.FC<PetCardProps> = ({ pet }) => {
   //console.log(pet.photoUrl);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {

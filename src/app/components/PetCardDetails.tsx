@@ -28,6 +28,7 @@ interface PetCardDetailsProps {
 const PetCardDetails: React.FC<PetCardDetailsProps> = ({ petId }) => {
   const [pet, setPet] = useState<Pet | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -50,6 +51,8 @@ const PetCardDetails: React.FC<PetCardDetailsProps> = ({ petId }) => {
         setPet(petData);
       } catch (error) {
         console.error("Error fetching pet details:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -59,7 +62,7 @@ const PetCardDetails: React.FC<PetCardDetailsProps> = ({ petId }) => {
   if (!pet) {
     return <div>Loading...</div>;
   }
-
+  if (loading) return <div className="text-center">Loading...</div>;
   return (
     <div className="border border-gray-200 rounded-md p-4">
       <h2 className="text-lg font-semibold mb-2">{pet.name}</h2>

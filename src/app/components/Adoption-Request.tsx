@@ -23,6 +23,7 @@ const AdoptionRequest: React.FC<PetCardProps> = ({ petId }) => {
     terms: false,
   });
   const [petOwnershipExperience, setPetOwnershipExperience] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     // Fetch user data if logged
@@ -49,6 +50,7 @@ const AdoptionRequest: React.FC<PetCardProps> = ({ petId }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       await axios.post(
@@ -73,9 +75,11 @@ const AdoptionRequest: React.FC<PetCardProps> = ({ petId }) => {
     } catch (error: any) {
       console.error("Error submitting adoption request:", error);
       toast.error("Failed to submit adoption request");
+    } finally {
+      setLoading(false);
     }
   };
-
+  if (loading) return <div className="text-center">Loading...</div>;
   return (
     <div className="container mx-auto mt-10">
       <h1 className="text-4xl text-center mb-6">Adoption Request</h1>

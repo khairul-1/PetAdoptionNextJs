@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddPet from "./AddPet";
 import AdminPetUpdate from "./AdminPetUpdate";
+import AllAdoptionRequest from "./AllAdoptionRequest";
 
 const UserPetAdmin: React.FC = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -11,7 +12,13 @@ const UserPetAdmin: React.FC = () => {
   const [modalMessage, setModalMessage] = useState("");
   const [users, setUsers] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [view, setView] = useState("");
+  const [view, setView] = useState("allUsers");
+  const [view2, setView2] = useState("");
+  const [view3, setView3] = useState("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [activeButton, setActiveButton] = useState("");
+  const [activeButton2, setActiveButton2] = useState("");
+  const [activeButton3, setActiveButton3] = useState("");
 
   useEffect(() => {
     // Fetch all user data
@@ -29,6 +36,8 @@ const UserPetAdmin: React.FC = () => {
         }
       } catch (error) {
         console.error("Error fetching users:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -48,6 +57,9 @@ const UserPetAdmin: React.FC = () => {
 
   const handleChangeUserType = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setLoading(true);
+
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
@@ -74,11 +86,16 @@ const UserPetAdmin: React.FC = () => {
     } catch (error) {
       console.error("Error updating user type:", error);
       setModalMessage("An error occurred while updating user type.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleChangeUserStatus = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setLoading(true);
+
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
@@ -105,18 +122,25 @@ const UserPetAdmin: React.FC = () => {
     } catch (error) {
       console.error("Error updating user status:", error);
       setModalMessage("An error occurred while updating user status.");
+    } finally {
+      setLoading(false);
     }
   };
-
+  if (loading) return <div className="text-center">Loading...</div>;
   return (
     <div className="flex">
       <div className="w-64 h-full shadow-md bg-white px-1 fixed">
-        <ul className="relative">
+        <ul className="absolute">
           <li className="relative">
             <button
-              className="btn btn-primary mt-2 underline"
+              className={`btn btn-primary mt-2 underline ${
+                activeButton === "allUsers"
+                  ? "btn-primary text-white"
+                  : "bg-green-500 text-white"
+              }`}
               onClick={() => {
                 view === "" ? setView("allUsers") : setView("");
+                setActiveButton(activeButton === "allUsers" ? "" : "allUsers");
               }}
             >
               {view === "" ? "View All Users" : "Hide All Users"}
@@ -146,178 +170,259 @@ const UserPetAdmin: React.FC = () => {
               Add Pet
             </button>
           </li>
+          {/* <li className="relative">
+            <button
+              className="btn btn-primary mt-2 underline"
+              onClick={() =>
+                showModal("adoption_request_modal", {}, "adoption_request")
+              }
+            >
+              Adoption Request
+            </button>
+          </li> */}
+          <li className="relative">
+            <button
+              className={`btn btn-primary mt-2 underline ${
+                activeButton2 === "pet-edit-delete"
+                  ? "bg-green-500 text-white"
+                  : "btn-primary text-white"
+              }`}
+              onClick={() => {
+                view2 === "" ? setView2("pet-edit-delete") : setView2("");
+                setActiveButton2(
+                  activeButton2 === "pet-edit-delete" ? "" : "pet-edit-delete"
+                );
+              }}
+            >
+              {view2 === "" ? "View Pet Edit Delete" : "Hide Adoption Request"}
+            </button>
+          </li>
+          <li className="relative">
+            <button
+              className={`btn btn-primary mt-2 underline ${
+                activeButton3 === "adoption-request"
+                  ? "bg-green-500 text-white"
+                  : "btn-primary text-white"
+              }`}
+              onClick={() => {
+                view3 === "" ? setView3("adoption-request") : setView3("");
+                setActiveButton3(
+                  activeButton3 === "adoption-request" ? "" : "adoption-request"
+                );
+              }}
+            >
+              {view3 === "" ? "View Adoption Request" : "Hide Adoption Request"}
+            </button>
+          </li>
         </ul>
       </div>
-
-      <div className="ml-64 p-4">
-        {view === "allUsers" && (
-          <>
-            <h1 className="text-2xl font-bold mb-4">All Users</h1>
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white">
-                <thead>
-                  <tr>
-                    <th className="py-2 px-4 border-b">Email</th>
-                    <th className="py-2 px-4 border-b">Type</th>
-                    <th className="py-2 px-4 border-b">Active Status</th>
-                    <th className="py-2 px-4 border-b">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((user) => (
-                    <tr key={user.id}>
-                      <td className="py-2 px-4 border-b">{user.email}</td>
-                      <td className="py-2 px-4 border-b">{user.type}</td>
-                      <td className="py-2 px-4 border-b">
-                        {user.isActive ? "Active" : "Inactive"}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        <button
-                          className="btn btn-primary mt-2 underline"
-                          onClick={() => showModal("profile_modal", user)}
-                        >
-                          Change User Type
-                        </button>
-                        <button
-                          className="btn btn-primary mt-2 underline"
-                          onClick={() => showModal("status_modal", user)}
-                        >
-                          Change User Status
-                        </button>
-                      </td>
+      <div className="grid grid-cols-1">
+        <div className="ml-64 p-4">
+          {view === "allUsers" && (
+            <>
+              <h1 className="text-2xl font-bold mb-4">All Users</h1>
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white">
+                  <thead>
+                    <tr>
+                      <th className="py-2 px-4 border-b">Email</th>
+                      <th className="py-2 px-4 border-b">Type</th>
+                      <th className="py-2 px-4 border-b">Active Status</th>
+                      <th className="py-2 px-4 border-b">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {users.map((user) => (
+                      <tr key={user.id}>
+                        <td className="py-2 px-4 border-b">{user.email}</td>
+                        <td className="py-2 px-4 border-b">{user.type}</td>
+                        <td className="py-2 px-4 border-b">
+                          {user.isActive ? "Active" : "Inactive"}
+                        </td>
+                        <td className="py-2 px-4 border-b">
+                          <button
+                            className="btn btn-primary mt-2 underline"
+                            onClick={() => showModal("profile_modal", user)}
+                          >
+                            Change User Type
+                          </button>
+                          <button
+                            className="btn btn-primary mt-2 underline"
+                            onClick={() => showModal("status_modal", user)}
+                          >
+                            Change User Status
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </div>
+
+        <dialog
+          id="profile_modal"
+          className="modal modal-bottom sm:modal-middle"
+        >
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Change User Type</h3>
+            <form onSubmit={handleChangeUserType}>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="email"
+                >
+                  User Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={userEmail}
+                  readOnly
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="type"
+                >
+                  Select user type
+                </label>
+                <select
+                  value={userType}
+                  onChange={(e) => setUserType(e.target.value)}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  required
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              >
+                Update User Type
+              </button>
+            </form>
+            {modalMessage && (
+              <div className="mt-4 text-center text-green-600">
+                {modalMessage}
+              </div>
+            )}
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn">Close</button>
+              </form>
             </div>
-          </>
-        )}
+          </div>
+        </dialog>
+
+        <dialog
+          id="status_modal"
+          className="modal modal-bottom sm:modal-middle"
+        >
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Change User Status</h3>
+            <form onSubmit={handleChangeUserStatus}>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="email-status"
+                >
+                  User Email
+                </label>
+                <input
+                  id="email-status"
+                  type="email"
+                  value={userEmail}
+                  readOnly
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="isActive"
+                >
+                  Active Status
+                </label>
+                <select
+                  value={isActive === true ? "true" : "false"}
+                  onChange={(e) => setIsActive(e.target.value === "true")}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  required
+                >
+                  <option value="true">Active</option>
+                  <option value="false">Inactive</option>
+                </select>
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              >
+                Update User Status
+              </button>
+            </form>
+            {modalMessage && (
+              <div className="mt-4 text-center text-green-600">
+                {modalMessage}
+              </div>
+            )}
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          id="add_pet_modal"
+          className="modal modal-bottom sm:modal-middle"
+        >
+          <div className="modal-box">
+            {/* <h3 className="font-bold text-lg">Add Pet</h3> */}
+            <AddPet />
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
+
+        {/* <dialog
+          id="adoption_request_modal"
+          className="modal modal-bottom sm:modal-middle"
+        >
+          <div className="modal-box">
+            <AllAdoptionRequest />
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog> */}
+        <div className="ml-64">
+          {view2 === "pet-edit-delete" && (
+            <>
+              <AdminPetUpdate />
+            </>
+          )}
+        </div>
+        <div className="ml-64">
+          {view3 === "adoption-request" && (
+            <>
+              <AllAdoptionRequest />
+            </>
+          )}
+        </div>
       </div>
-
-      <dialog id="profile_modal" className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Change User Type</h3>
-          <form onSubmit={handleChangeUserType}>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="email"
-              >
-                User Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={userEmail}
-                readOnly
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="type"
-              >
-                Select user type
-              </label>
-              <select
-                value={userType}
-                onChange={(e) => setUserType(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              Update User Type
-            </button>
-          </form>
-          {modalMessage && (
-            <div className="mt-4 text-center text-green-600">
-              {modalMessage}
-            </div>
-          )}
-          <div className="modal-action">
-            <form method="dialog">
-              <button className="btn">Close</button>
-            </form>
-          </div>
-        </div>
-      </dialog>
-
-      <dialog id="status_modal" className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Change User Status</h3>
-          <form onSubmit={handleChangeUserStatus}>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="email-status"
-              >
-                User Email
-              </label>
-              <input
-                id="email-status"
-                type="email"
-                value={userEmail}
-                readOnly
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="isActive"
-              >
-                Active Status
-              </label>
-              <select
-                value={isActive === true ? "true" : "false"}
-                onChange={(e) => setIsActive(e.target.value === "true")}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              >
-                <option value="true">Active</option>
-                <option value="false">Inactive</option>
-              </select>
-            </div>
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              Update User Status
-            </button>
-          </form>
-          {modalMessage && (
-            <div className="mt-4 text-center text-green-600">
-              {modalMessage}
-            </div>
-          )}
-          <div className="modal-action">
-            <form method="dialog">
-              <button className="btn">Close</button>
-            </form>
-          </div>
-        </div>
-      </dialog>
-
-      <dialog id="add_pet_modal" className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          {/* <h3 className="font-bold text-lg">Add Pet</h3> */}
-          <AddPet />
-          <div className="modal-action">
-            <form method="dialog">
-              <button className="btn">Close</button>
-            </form>
-          </div>
-        </div>
-      </dialog>
-      <AdminPetUpdate />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import PetCard from "./PetCard";
 
 const PetsPage: React.FC = () => {
   const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,12 +14,14 @@ const PetsPage: React.FC = () => {
         setPets(response.data.data);
       } catch (error) {
         console.error("Error fetching pets:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []); // Empty dependency array means this effect will only run once, on component mount
-
+  if (loading) return <div className="text-center">Loading...</div>;
   return (
     <div className="container mx-auto">
       <h1 className="text-4xl text-center mt-10">Available Pets</h1>

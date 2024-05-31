@@ -6,6 +6,7 @@ import { decode } from "jwt-js-decode";
 import Modal from "./Modal";
 
 const AddPet: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(true);
   const [petData, setPetData] = useState({
     name: "Buddy",
     photoUrl: "",
@@ -40,6 +41,8 @@ const AddPet: React.FC = () => {
       } catch (error) {
         console.error("Error decoding token:", error);
         setModalMessage("Invalid token.");
+      } finally {
+        setLoading(false);
       }
     }
   }, []);
@@ -91,6 +94,8 @@ const AddPet: React.FC = () => {
       } catch (error) {
         console.error("Error uploading image:", error);
         setModalMessage("Failed to upload image.");
+      } finally {
+        setLoading(false);
       }
     }
     return null;
@@ -98,6 +103,8 @@ const AddPet: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setLoading(true);
 
     //setPetData({...petData, photoUrl: imageFile} )
     const isFormValid =
@@ -128,10 +135,12 @@ const AddPet: React.FC = () => {
       } catch (error) {
         console.error("Error adding pet:", error);
         setModalMessage("Failed to add pet.");
+      } finally {
+        setLoading(false);
       }
     }
   };
-
+  if (loading) return <div className="text-center">Loading...</div>;
   return (
     <div className="mx-auto mt-10">
       {modalMessage && (

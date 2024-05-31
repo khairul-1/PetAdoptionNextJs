@@ -32,6 +32,7 @@ const HomePage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [totalPets, setTotalPets] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -51,6 +52,8 @@ const HomePage: React.FC = () => {
       );
     } catch (error) {
       console.error("Error fetching pets:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,7 +70,7 @@ const HomePage: React.FC = () => {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
-
+  if (loading) return <div className="text-center">Loading...</div>;
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow container mx-auto p-4">

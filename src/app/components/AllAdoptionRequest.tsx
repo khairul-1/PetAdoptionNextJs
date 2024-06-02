@@ -1,7 +1,7 @@
 // pages/adoption-requests.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "tailwindcss/tailwind.css";
+//import "tailwindcss/tailwind.css";
 
 interface AdoptionRequest {
   id: string;
@@ -25,7 +25,7 @@ const AllAdoptionRequest: React.FC = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "https://l2assgn8.vercel.app/api/all-adoption-requests",
+          "http://localhost:5000/api/all-adoption-requests",
           {
             headers: { Authorization: `${token}` },
           }
@@ -47,7 +47,7 @@ const AllAdoptionRequest: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `https://l2assgn8.vercel.app/api/adoption-requests/${id}`,
+        `http://localhost:5000/api/adoption-requests/${id}`,
         { status: "APPROVED" },
         {
           headers: { Authorization: `${token}` },

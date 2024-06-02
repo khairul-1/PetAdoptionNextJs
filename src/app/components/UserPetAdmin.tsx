@@ -22,7 +22,7 @@ const UserPetAdmin: React.FC = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:5000/api/user-status",
+          "https://l2assgn8.vercel.app/api/user-status",
           {
             headers: { Authorization: `${token}` },
           }
@@ -59,7 +59,7 @@ const UserPetAdmin: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        "http://localhost:5000/api/user-status",
+        "https://l2assgn8.vercel.app/api/user-status",
         {
           email: userEmail,
           type: userType,
@@ -95,7 +95,7 @@ const UserPetAdmin: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        "http://localhost:5000/api/user-status",
+        "https://l2assgn8.vercel.app/api/user-status",
         {
           email: userEmail,
           isActive: isActive,

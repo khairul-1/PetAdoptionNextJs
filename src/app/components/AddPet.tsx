@@ -68,6 +68,8 @@ const AddPet: React.FC = () => {
     }
   };
 
+  //const imgKey = process.env.IMGBB_KEY;
+
   useEffect(() => {
     console.log("imageFile state updated:", imageFile);
   }, [imageFile]);
@@ -84,6 +86,7 @@ const AddPet: React.FC = () => {
           {
             params: {
               key: "8216abb6bba6ecd271d044d375ede495",
+              // key: imgKey,
             },
           }
         );
@@ -122,7 +125,7 @@ const AddPet: React.FC = () => {
         console.log(imageUrl);
         if (imageUrl) {
           const response = await axios.post(
-            "http://localhost:5000/api/pets",
+            "https://l2assgn8.vercel.app/api/pets",
             { ...petData, photoUrl: imageUrl },
             {
               headers: { Authorization: `${token}` },
@@ -140,6 +143,7 @@ const AddPet: React.FC = () => {
       }
     }
   };
+
   if (loading) return <div className="text-center">Loading...</div>;
   return (
     <div className="mx-auto mt-10">

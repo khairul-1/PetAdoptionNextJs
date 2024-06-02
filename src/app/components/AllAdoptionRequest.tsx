@@ -25,7 +25,7 @@ const AllAdoptionRequest: React.FC = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:5000/api/all-adoption-requests",
+          "https://l2assgn8.vercel.app/api/all-adoption-requests",
           {
             headers: { Authorization: `${token}` },
           }
@@ -47,7 +47,7 @@ const AllAdoptionRequest: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5000/api/adoption-requests/${id}`,
+        `https://l2assgn8.vercel.app/api/adoption-requests/${id}`,
         { status: "APPROVED" },
         {
           headers: { Authorization: `${token}` },

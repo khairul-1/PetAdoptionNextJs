@@ -65,7 +65,7 @@ const UpdateUserStatus: React.FC = () => {
 
       try {
         setLoading(true);
-        await axios.put("http://localhost:5000/api/user-status", data, {
+        await axios.put("https://l2assgn8.vercel.app/api/user-status", data, {
           headers: { Authorization: `${token}` },
         });
         toast.success("User status updated successfully!");

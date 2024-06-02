@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
 
   const fetchPets = async (params = {}) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/pets", {
+      const response = await axios.get("https://l2assgn8.vercel.app/api/pets", {
         params: { ...params, page, limit: 10 },
       });
       setPets(response.data.data);

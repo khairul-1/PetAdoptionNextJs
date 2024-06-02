@@ -32,7 +32,7 @@ const AdoptionRequest: React.FC<PetCardProps> = ({ petId }) => {
     if (token) {
       // Fetch user profile
       axios
-        .get("http://localhost:5000/api/profile", {
+        .get("https://l2assgn8.vercel.app/api/profile", {
           headers: { Authorization: `${token}` },
         })
         .then((response) => {
@@ -54,7 +54,7 @@ const AdoptionRequest: React.FC<PetCardProps> = ({ petId }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `http://localhost:5000/api/adoption-request`,
+        `https://l2assgn8.vercel.app/api/adoption-request`,
         {
           petId,
           petOwnershipExperience,

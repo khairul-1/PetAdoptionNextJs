@@ -13,10 +13,13 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://l2assgn8.vercel.app/api/login",
+        {
+          email,
+          password,
+        }
+      );
       const token = response?.data?.data?.token;
       if (token) {
         localStorage.setItem("token", token); // Save token to local storage

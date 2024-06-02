@@ -16,11 +16,14 @@ const RegistrationForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/register", {
-        name,
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://l2assgn8.vercel.app/api/register",
+        {
+          name,
+          email,
+          password,
+        }
+      );
       toast.success(`User registered successfully ${response.data.message}`, {
         onClose: () => {
           window.location.href = "/"; // Navigate to the home page

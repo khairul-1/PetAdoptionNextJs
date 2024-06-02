@@ -41,7 +41,7 @@ const AdminPetUpdate: React.FC = () => {
 
   const fetchPets = async (params = {}) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/pets", {
+      const response = await axios.get("https://l2assgn8.vercel.app/api/pets", {
         params: { ...params, page, limit: 10 },
       });
       setPets(response.data.data);
@@ -76,7 +76,7 @@ const AdminPetUpdate: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:5000/api/pets/${petId}`,
+        `https://l2assgn8.vercel.app/api/pets/${petId}`,
         {
           headers: { Authorization: `${token}` },
         }
@@ -95,9 +95,13 @@ const AdminPetUpdate: React.FC = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/pets/${petId}`, updatedData, {
-        headers: { Authorization: `${token}` },
-      });
+      await axios.put(
+        `https://l2assgn8.vercel.app/api/pets/${petId}`,
+        updatedData,
+        {
+          headers: { Authorization: `${token}` },
+        }
+      );
       console.log("Pet data updated successfully!");
       setSuccessMessage("Pet data updated successfully!");
       setTimeout(() => setSuccessMessage(""), 3000); // Clear message after 3 seconds
@@ -115,7 +119,7 @@ const AdminPetUpdate: React.FC = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/pets/${petId}`, {
+      await axios.delete(`https://l2assgn8.vercel.app/api/pets/${petId}`, {
         headers: { Authorization: `${token}` },
       });
       setPets((prevPets) => prevPets.filter((pet) => pet.id !== petId));

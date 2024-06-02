@@ -17,7 +17,7 @@ const ChangePassword: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5000/api/profile`,
+        `https://l2assgn8.vercel.app/api/profile`,
         {
           oldPassword: passwordData.oldPassword,
           newPassword: passwordData.newPassword,

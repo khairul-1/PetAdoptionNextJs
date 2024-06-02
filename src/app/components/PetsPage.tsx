@@ -9,7 +9,9 @@ const PetsPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/pets");
+        const response = await axios.get(
+          "https://l2assgn8.vercel.app/api/pets"
+        );
         //console.log(response.data.data);
         setPets(response.data.data);
       } catch (error) {

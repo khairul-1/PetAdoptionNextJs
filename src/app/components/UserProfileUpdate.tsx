@@ -16,7 +16,7 @@ const UserProfileUpdate = () => {
     if (token) {
       // Fetch user profile
       axios
-        .get("http://localhost:5000/api/profile", {
+        .get("https://l2assgn8.vercel.app/api/profile", {
           headers: { Authorization: `${token}` },
         })
         .then((response) => {
@@ -37,7 +37,7 @@ const UserProfileUpdate = () => {
       const token = localStorage.getItem("token");
       // Update user profile
       await axios.put(
-        `http://localhost:5000/api/profile`,
+        `https://l2assgn8.vercel.app/api/profile`,
         {
           name: userData.name,
           email: userData.email,

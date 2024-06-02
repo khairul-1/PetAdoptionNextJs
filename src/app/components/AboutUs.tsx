@@ -27,7 +27,7 @@ const AboutUs: React.FC = () => {
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">Contact Information</h2>
           <p className="text-gray-700 mb-2">Email: contact@petadoption.com</p>
-          <p className="text-gray-700 mb-2">Phone: +1 (123) 456-7890</p>
+          <p className="text-gray-700 mb-2">Phone: +88 (123) 456-7890</p>
           <div className="flex space-x-4">
             <a href="#" className="text-blue-500 hover:text-blue-700">
               Facebook

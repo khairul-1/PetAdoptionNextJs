@@ -51,7 +51,7 @@ const UserPetProfile: React.FC = () => {
     if (token) {
       // Fetch user profile
       axios
-        .get("http://localhost:5000/api/profile", {
+        .get("https://l2assgn8.vercel.app/api/profile", {
           headers: { Authorization: `${token}` },
         })
         .then((response) => {
@@ -71,7 +71,7 @@ const UserPetProfile: React.FC = () => {
     if (token) {
       // Fetch adoption requests
       axios
-        .get("http://localhost:5000/api/adoption-requests", {
+        .get("https://l2assgn8.vercel.app/api/adoption-requests", {
           headers: { Authorization: `${token}` },
         })
         .then((response) => {
@@ -90,7 +90,7 @@ const UserPetProfile: React.FC = () => {
 
       // Fetch pets related to the adoption requests
       axios
-        .get("http://localhost:5000/api/pets", {
+        .get("https://l2assgn8.vercel.app/api/pets", {
           headers: { Authorization: `${token}` },
         })
         .then((response) => {

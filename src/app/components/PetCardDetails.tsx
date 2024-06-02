@@ -41,9 +41,12 @@ const PetCardDetails: React.FC<PetCardDetailsProps> = ({ petId }) => {
     const fetchPet = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(`http://localhost:5000/api/pets`, {
-          headers: { Authorization: `${token}` },
-        });
+        const response = await axios.get(
+          `https://l2assgn8.vercel.app/api/pets`,
+          {
+            headers: { Authorization: `${token}` },
+          }
+        );
         console.log(petId);
         console.log(response.data.data);
         const petData = response.data.data.find((pet: Pet) => pet.id === petId);

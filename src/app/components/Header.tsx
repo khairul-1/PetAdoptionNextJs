@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { decode } from "jwt-js-decode";
+import Image from "next/image";
+import petLogo from "../../../public/petLogo.png";
 
 const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,6 +30,13 @@ const Header: React.FC = () => {
   return (
     <div className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
+        <Image
+          src={petLogo}
+          height={60}
+          width={60}
+          alt="petAdoption"
+          className="rounded-full"
+        />
         <h1 className="text-3xl font-bold">PetAdoption</h1>
         <nav className="space-x-4">
           <Link href="/" className="btn">

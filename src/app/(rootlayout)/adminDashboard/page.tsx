@@ -1,3 +1,4 @@
+"use client";
 import UserPetAdmin from "@/app/components/UserPetAdmin";
 import React from "react";
 

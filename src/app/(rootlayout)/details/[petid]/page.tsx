@@ -4,7 +4,9 @@ import PrivateRoute from "@/app/components/PrivateRoute";
 import React from "react";
 
 function DetailsPetId({ params }: { params: { petid: string } }) {
-  //console.log(params.petid);
+  console.log(params);
+  console.log(params.petid);
+  //const petId=params.petid;
   return (
     <div>
       <PetCardDetails key={params.petid} petId={params.petid} />

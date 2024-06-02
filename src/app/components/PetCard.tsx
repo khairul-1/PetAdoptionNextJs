@@ -18,8 +18,6 @@ interface PetCardProps {
     temperament: string;
     medicalHistory: string;
     adoptionRequirements: string;
-    createdAt: string;
-    updatedAt: string;
   };
 }
 

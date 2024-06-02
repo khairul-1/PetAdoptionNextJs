@@ -47,10 +47,10 @@ const PetCardDetails: React.FC<PetCardDetailsProps> = ({ petId }) => {
             headers: { Authorization: `${token}` },
           }
         );
-        console.log(petId);
-        console.log(response.data.data);
+        //console.log(petId);
+        //console.log(response.data.data);
         const petData = response.data.data.find((pet: Pet) => pet.id === petId);
-        console.log(petData);
+        //console.log(petData);
         setPet(petData);
       } catch (error) {
         console.error("Error fetching pet details:", error);
